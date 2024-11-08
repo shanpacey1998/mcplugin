@@ -1,0 +1,31 @@
+name: Run PHPStan and PHP CS Fixer
+
+on: ['push']
+
+jobs:
+  phpchecks:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
+      - name: Install dependencies
+        run: |
+          cd phpchecks
+          composer install --no-interaction --ignore-platform-reqs
+
+      - name: Run PHPStan
+        run: |
+          cd phpchecks
+          ./vendor/bin/phpstan analyse ../src
+
+      - name: Run PHP CS Fixer
+        run: |
+          cd phpchecks
+          ./vendor/bin/php-cs-fixer fix ../src --dry-run --diff

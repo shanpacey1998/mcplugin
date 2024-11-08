@@ -1,0 +1,9 @@
+{
+    "require-dev": {
+        "phpstan/phpstan": "^1.12",
+        "friendsofphp/php-cs-fixer": "^3.64"
+    },
+    "require": {
+        "pocketmine/pocketmine-mp": "5.0.0"
+    }
+}
