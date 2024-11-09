@@ -1,5 +1,4 @@
-#name, main, version and api are required
 name: PrisonCore
-main: Prison\Main
+main: Prison\Core\Loader\Loader
 version: 1.0.0
 api: 5.0.0
