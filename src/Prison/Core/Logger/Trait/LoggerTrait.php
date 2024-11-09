@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Prison\Core\Logger\Trait;
 
 use Logger;
+use pocketmine\command\CommandSender;
+use pocketmine\utils\TextFormat;
 use Prison\Core\Loader\Interface\LoaderAwareInterface;
 
 trait LoggerTrait
@@ -20,6 +22,23 @@ trait LoggerTrait
     {
         if ($this->isDebug()) {
             $this->getLogger()?->warning($message);
+        }
+    }
+
+    private function sendInfo(CommandSender $sender, string $message): void
+    {
+        $sender->sendMessage(sprintf('%s%s', TextFormat::GRAY, $message));
+    }
+
+    private function sendError(CommandSender $sender, string $message): void
+    {
+        $sender->sendMessage(sprintf('%s%s', TextFormat::RED, $message));
+    }
+
+    private function sendErrors(CommandSender $sender, array $messages): void
+    {
+        foreach ($messages as $message) {
+            $this->sendError($sender, $message);
         }
     }
 
