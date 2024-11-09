@@ -11,9 +11,9 @@ use pocketmine\permission\PermissionAttachment;
 use pocketmine\permission\PermissionManager;
 use pocketmine\permission\PermissionParser;
 use pocketmine\plugin\PluginBase;
+use Prison\Permission\Command\AddPermissionCommand;
 use Prison\Permission\Command\ListPermissionsCommand;
 use Prison\Permission\DataManager\PlayerPermissionDataManager;
-use Prison\Permission\Enum\PermissionEnum;
 use Prison\Permission\EventListener\PlayerPermissionListener;
 use Prison\Permission\Manager\PlayerPermissionManager;
 use Prison\Permission\Manager\PlayerPermissionManagerInterface;
@@ -57,7 +57,8 @@ class Loader extends PluginBase
         $this->getServer()->getCommandMap()->registerAll(
             self::FALLBACK_PREFIX,
             [
-                new ListPermissionsCommand($this)
+                new ListPermissionsCommand($this),
+                new AddPermissionCommand($this->playerPermissionManager, $this)
             ]
         );
 

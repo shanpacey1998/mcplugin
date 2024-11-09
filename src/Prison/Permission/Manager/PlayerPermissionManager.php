@@ -35,6 +35,7 @@ class PlayerPermissionManager implements PlayerPermissionManagerInterface
         $this->logInfo(sprintf('Adding permission %s to %s', $permission, $player->getName()));
 
         $this->playerPermissionDataManager->savePermissions($player, $permissions);
+        $this->resyncPermissions($player);
     }
 
     public function removePermission(Player $player, string $permission): void
@@ -56,6 +57,7 @@ class PlayerPermissionManager implements PlayerPermissionManagerInterface
         }
 
         $this->playerPermissionDataManager->savePermissions($player, $permissions);
+        $this->resyncPermissions($player);
     }
 
     public function resyncPermissions(Player $player): void

@@ -25,6 +25,11 @@ trait LoggerTrait
         }
     }
 
+    private function sendSuccess(CommandSender $sender, string $message): void
+    {
+        $sender->sendMessage(sprintf('%s%s', TextFormat::GREEN, $message));
+    }
+
     private function sendInfo(CommandSender $sender, string $message): void
     {
         $sender->sendMessage(sprintf('%s%s', TextFormat::GRAY, $message));
