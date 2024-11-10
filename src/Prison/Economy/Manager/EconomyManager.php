@@ -24,6 +24,11 @@ class EconomyManager implements EconomyManagerInterface
     public function addMoney(string $playerName, int $amount): void
     {
         $player = $this->loader->getServer()->getOfflinePlayer($playerName);
+
+        if (!$player instanceof Player) {
+            return;
+        }
+
         $moneyData = $this->economyDataManager->getMoney($player);
         $balance = 0;
 
@@ -41,6 +46,11 @@ class EconomyManager implements EconomyManagerInterface
     public function subtractMoney(string $playerName, int $amount): void
     {
         $player = $this->loader->getServer()->getOfflinePlayer($playerName);
+
+        if (!$player instanceof Player) {
+            return;
+        }
+
         $moneyData = $this->economyDataManager->getMoney($player);
         $balance = 0;
 
@@ -58,6 +68,11 @@ class EconomyManager implements EconomyManagerInterface
     public function setMoney(string $playerName, int $amount): void
     {
         $player = $this->loader->getServer()->getOfflinePlayer($playerName);
+
+        if (!$player instanceof Player) {
+            return;
+        }
+
         $moneyData = $this->economyDataManager->getMoney($player);
 
         $moneyData['balance'] = $amount;
@@ -70,6 +85,11 @@ class EconomyManager implements EconomyManagerInterface
     public function hasMoney(string $playerName, int $amount): bool
     {
         $player = $this->loader->getServer()->getOfflinePlayer($playerName);
+
+        if (!$player instanceof Player) {
+            return false;
+        }
+
         $moneyData = $this->economyDataManager->getMoney($player);
 
         if ($amount < $moneyData['balance']) {
@@ -82,6 +102,11 @@ class EconomyManager implements EconomyManagerInterface
     public function getMoney(string $playerName): int
     {
         $player = $this->loader->getServer()->getOfflinePlayer($playerName);
+
+        if (!$player instanceof Player) {
+            return 0;
+        }
+
         $moneyData = $this->economyDataManager->getMoney($player);
 
         return $moneyData['balance'];
