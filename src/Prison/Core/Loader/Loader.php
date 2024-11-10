@@ -50,10 +50,6 @@ class Loader extends PluginBase
         $rankDataManager = new RankDataManager($this);
 
         $this->getServer()->getPluginManager()->registerEvents(new PlayerPermissionListener($this->playerPermissionManager), $this);
-        $this->getServer()->getPluginManager()->registerEvents(new PlayerRankListener(
-            new PlayerRankDataManager($this),
-            new RankManager($rankDataManager, $this)
-        ), $this);
 
         $this->getServer()->getCommandMap()->registerAll(
             self::FALLBACK_PREFIX,
