@@ -36,7 +36,8 @@ class SetMoneyCommand extends Command implements LoaderAwareInterface
 
         $this->setPermission(PermissionList::SET_MONEY_COMMAND);
     }
-    public function execute(CommandSender $sender, string $commandLabel, array $args)
+
+    public function execute(CommandSender $sender, string $commandLabel, array $args): void
     {
         $commandValidator = new CommandValidator($sender);
 

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Prison\Economy\Command;
 
@@ -33,7 +34,7 @@ class SeeMoneyCommand extends Command implements LoaderAwareInterface
             ['seebalance', 'seebal', 'seemoney']
         );
 
-        $this->setPermission(PermissionList::SET_MONEY_COMMAND);
+        $this->setPermission(PermissionList::SEE_MONEY_COMMAND);
     }
     public function execute(CommandSender $sender, string $commandLabel, array $args): void
     {
