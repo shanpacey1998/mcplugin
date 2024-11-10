@@ -15,7 +15,6 @@ use Prison\Core\Logger\Trait\LoggerTrait;
 use Prison\Core\Validator\CommandValidator;
 use Prison\Economy\Manager\EconomyManagerInterface;
 use Prison\Economy\Validator\GetMoneyConstraint;
-use Prison\Economy\Validator\MoneyConstraint;
 use Prison\Permission\PermissionList;
 
 class MyMoneyCommand extends Command implements LoaderAwareInterface
