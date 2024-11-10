@@ -12,6 +12,7 @@ use pocketmine\permission\PermissionManager;
 use pocketmine\permission\PermissionParser;
 use pocketmine\plugin\PluginBase;
 use Prison\Economy\Command\AddMoneyCommand;
+use Prison\Economy\Command\SubtractMoneyCommand;
 use Prison\Economy\DataManager\EconomyDataManager;
 use Prison\Economy\EventListener\EconomyListener;
 use Prison\Economy\Manager\EconomyManager;

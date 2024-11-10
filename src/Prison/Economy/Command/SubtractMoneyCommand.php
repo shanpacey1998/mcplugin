@@ -11,7 +11,7 @@ use Prison\Core\Loader\Trait\LoaderAwareTrait;
 use Prison\Core\Logger\Trait\LoggerTrait;
 use Prison\Core\Validator\CommandValidator;
 use Prison\Economy\Manager\EconomyManagerInterface;
-use Prison\Economy\Validator\AddMoneyConstraint;
+use Prison\Economy\Validator\MoneyConstraint;
 use Prison\Permission\PermissionList;
 
 class SubtractMoneyCommand extends Command implements LoaderAwareInterface
@@ -40,7 +40,7 @@ class SubtractMoneyCommand extends Command implements LoaderAwareInterface
     {
         $commandValidator = new CommandValidator($sender);
 
-        if (!$commandValidator->isValid($args, new AddMoneyConstraint($this->loader))) {
+        if (!$commandValidator->isValid($args, new MoneyConstraint($this->loader))) {
             $this->sendInfo($sender, $this->getUsage());
 
             return;

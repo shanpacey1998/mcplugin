@@ -8,7 +8,7 @@ use Prison\Core\Loader\Loader;
 use Prison\Core\Loader\Trait\LoaderAwareTrait;
 use Prison\Core\Validator\Constraints\ConstraintInterface;
 
-class AddMoneyConstraint implements ConstraintInterface, LoaderAwareInterface
+class MoneyConstraint implements ConstraintInterface, LoaderAwareInterface
 {
     use LoaderAwareTrait;
 
