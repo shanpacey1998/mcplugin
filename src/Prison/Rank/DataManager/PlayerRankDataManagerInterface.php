@@ -11,7 +11,7 @@ use Prison\Rank\Dto\Rank;
 
 interface PlayerRankDataManagerInterface extends LoaderAwareInterface, DataManagerInterface
 {
-    public function getRank(Player $player): ?Rank;
+    public function getRankName(Player $player): ?string;
 
     public function saveRank(Player $player, Rank $rank): void;
 }

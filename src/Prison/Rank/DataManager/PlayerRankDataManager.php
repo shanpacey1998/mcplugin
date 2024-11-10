@@ -33,7 +33,7 @@ class PlayerRankDataManager implements PlayerRankDataManagerInterface
         return Path::join($this->loader->getDataFolder(), RankDataManager::FOLDER_NAME, self::FOLDER_NAME);
     }
 
-    public function getRank(Player $player): ?Rank
+    public function getRankName(Player $player): ?string
     {
         $filePath = $this->getFilepath($player);
 
