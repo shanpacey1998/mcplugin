@@ -24,8 +24,7 @@ class SubtractMoneyCommand extends Command implements LoaderAwareInterface
     public function __construct(
         private readonly EconomyManagerInterface $economyManager,
         Loader                                   $loader
-    )
-    {
+    ) {
         $this->setLoader($loader);
 
         parent::__construct(
@@ -56,7 +55,7 @@ class SubtractMoneyCommand extends Command implements LoaderAwareInterface
             return;
         }
 
-        $this->economyManager->subtractMoney($player->getName(),(int) $amount);
+        $this->economyManager->subtractMoney($player->getName(), (int) $amount);
 
         $this->sendSuccess($sender, sprintf('Successfully subtracted %d money from %s', $amount, $player->getName()));
     }

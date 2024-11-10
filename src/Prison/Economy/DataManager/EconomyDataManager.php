@@ -20,7 +20,8 @@ class EconomyDataManager implements EconomyDataManagerInterface
 
     private Filesystem $filesystem;
 
-    public function __construct(Loader $loader) {
+    public function __construct(Loader $loader)
+    {
         $this->filesystem = new Filesystem();
 
         $this->setLoader($loader);

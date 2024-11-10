@@ -24,8 +24,7 @@ class MyMoneyCommand extends Command implements LoaderAwareInterface
     public function __construct(
         private readonly EconomyManagerInterface $economyManager,
         Loader                                   $loader
-    )
-    {
+    ) {
         $this->setLoader($loader);
 
         parent::__construct(

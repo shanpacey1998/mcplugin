@@ -24,8 +24,7 @@ class AddMoneyCommand extends Command implements LoaderAwareInterface
     public function __construct(
         private readonly EconomyManagerInterface $economyManager,
         Loader                                   $loader
-    )
-    {
+    ) {
         $this->setLoader($loader);
 
         parent::__construct(
@@ -56,7 +55,7 @@ class AddMoneyCommand extends Command implements LoaderAwareInterface
             return;
         }
 
-        $this->economyManager->addMoney($player->getName(),(int) $amount);
+        $this->economyManager->addMoney($player->getName(), (int) $amount);
 
         $this->sendSuccess($sender, sprintf('Successfully added %d money to %s', $amount, $player->getName()));
     }

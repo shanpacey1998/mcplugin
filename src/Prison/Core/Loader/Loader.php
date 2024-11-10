@@ -59,21 +59,6 @@ class Loader extends PluginBase
         $this->attachments = [];
 
         $rankDataManager = new RankDataManager($this);
-        $playerPermissionDataManager = new PlayerPermissionDataManager($this);
-        $playerPermissionDataManager->createDirectory();
-
-        $economyDataManager = new EconomyDataManager($this);
-        $economyDataManager->createDirectory();
-        $this->economyManager = new EconomyManager($this, $economyDataManager);
-
-        $this->playerPermissionManager = new PlayerPermissionManager(
-            $playerPermissionDataManager,
-            $this
-        );
-
-        $this->registerPermissions();
-
-        $this->playerPermissionManager->registerPlayers();
 
         $this->getServer()->getPluginManager()->registerEvents(new PlayerPermissionListener($this->playerPermissionManager), $this);
         $this->getServer()->getPluginManager()->registerEvents(new PlayerRankListener(
@@ -190,6 +175,10 @@ class Loader extends PluginBase
 
         $rankDataManager = new RankDataManager($this);
         $rankDataManager->createDirectory();
+
+        $economyDataManager = new EconomyDataManager($this);
+        $economyDataManager->createDirectory();
+        $this->economyManager = new EconomyManager($this, $economyDataManager);
 
         $playerRankDataManager = new PlayerRankDataManager($this);
         $playerRankDataManager->createDirectory();
