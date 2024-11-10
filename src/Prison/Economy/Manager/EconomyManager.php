@@ -46,11 +46,6 @@ class EconomyManager implements EconomyManagerInterface
             $balance = $moneyData['balance'];
         }
 
-        if ($balance === 0) {
-            $this->logInfo(sprintf('Balance for %s is already 0, cannot sub more money!',$player->getName()));
-            return;
-        }
-
         $moneyData['balance'] = $balance - $amount;
 
         $this->logInfo(sprintf('Subtracting %d money from %s', $amount, $player->getName()));
