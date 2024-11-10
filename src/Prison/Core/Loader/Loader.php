@@ -11,6 +11,11 @@ use pocketmine\permission\PermissionAttachment;
 use pocketmine\permission\PermissionManager;
 use pocketmine\permission\PermissionParser;
 use pocketmine\plugin\PluginBase;
+use Prison\Economy\Command\AddMoneyCommand;
+use Prison\Economy\DataManager\EconomyDataManager;
+use Prison\Economy\EventListener\EconomyListener;
+use Prison\Economy\Manager\EconomyManager;
+use Prison\Economy\Manager\EconomyManagerInterface;
 use Prison\Permission\Command\AddPermissionCommand;
 use Prison\Permission\Command\ListAllPermissionsCommand;
 use Prison\Permission\Command\ListPermissionsCommand;
@@ -35,6 +40,8 @@ class Loader extends PluginBase
 
     private PlayerPermissionManagerInterface $playerPermissionManager;
 
+    private EconomyManagerInterface $economyManager;
+
     protected function onEnable(): void
     {
         $fileSystem = new Filesystem();
@@ -44,6 +51,10 @@ class Loader extends PluginBase
 
         $playerPermissionDataManager = new PlayerPermissionDataManager($this);
         $playerPermissionDataManager->createDirectory();
+
+        $economyDataManager = new EconomyDataManager($this);
+        $economyDataManager->createDirectory();
+        $this->economyManager = new EconomyManager($this, $economyDataManager);
 
         $this->playerPermissionManager = new PlayerPermissionManager(
             $playerPermissionDataManager,
@@ -55,6 +66,7 @@ class Loader extends PluginBase
         $this->playerPermissionManager->registerPlayers();
 
         $this->getServer()->getPluginManager()->registerEvents(new PlayerPermissionListener($this->playerPermissionManager), $this);
+        $this->getServer()->getPluginManager()->registerEvents(new EconomyListener($this->economyManager), $this);
 
         $this->getServer()->getCommandMap()->registerAll(
             self::FALLBACK_PREFIX,
@@ -63,6 +75,9 @@ class Loader extends PluginBase
                 new AddPermissionCommand($this->playerPermissionManager, $this),
                 new RemovePermissionCommand($this->playerPermissionManager, $this),
                 new ListAllPermissionsCommand(),
+                new AddMoneyCommand($this->economyManager, $this),
+                new SubtractMoneyCommand($this->economyManager, $this),
+
             ]
         );
 
