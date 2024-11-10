@@ -15,6 +15,8 @@ class PermissionList
     public const SUBTRACT_MONEY_COMMAND = 'prison.command.money.subtract';
     public const SET_MONEY_COMMAND = 'prison.command.money.set';
     public const SEE_MONEY_COMMAND = 'prison.command.money.see';
+
+    public const MY_MONEY_COMMAND = 'prison.command.money.my';
     public const PERMISSIONS_MAP = [
         self::LIST_PERMISSIONS_COMMAND => PermissionParser::DEFAULT_OP,
         self::ADD_PERMISSION_COMMAND => PermissionParser::DEFAULT_OP,
@@ -23,5 +25,6 @@ class PermissionList
         self::SUBTRACT_MONEY_COMMAND => PermissionParser::DEFAULT_OP,
         self::SET_MONEY_COMMAND => PermissionParser::DEFAULT_OP,
         self::SEE_MONEY_COMMAND => PermissionParser::DEFAULT_OP,
+        self::MY_MONEY_COMMAND => PermissionParser::DEFAULT_NOT_OP,
     ];
 }
