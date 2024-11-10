@@ -5,20 +5,21 @@ declare(strict_types=1);
 namespace Prison\Economy\DataManager;
 
 use pocketmine\player\IPlayer;
+use Prison\Core\DataManager\DataManagerInterface;
+use Prison\Core\DataManager\Trait\FilesystemTrait;
 use Prison\Core\Loader\Loader;
 use Prison\Core\Loader\Trait\LoaderAwareTrait;
 use Prison\Core\Logger\Trait\LoggerTrait;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Path;
 
-class EconomyDataManager implements EconomyDataManagerInterface
+class EconomyDataManager implements EconomyDataManagerInterface, DataManagerInterface
 {
     use LoaderAwareTrait;
     use LoggerTrait;
+    use FilesystemTrait;
 
     private const FOLDER_NAME = 'economy';
-
-    private Filesystem $filesystem;
 
     public function __construct(Loader $loader)
     {
@@ -54,13 +55,6 @@ class EconomyDataManager implements EconomyDataManagerInterface
         }
     }
 
-    public function createDirectory(): void
-    {
-        $folderPath = Path::join($this->loader->getDataFolder(), self::FOLDER_NAME);
-
-        $this->filesystem->mkdir($folderPath);
-    }
-
     private function getJsonFilename(IPlayer $player): string
     {
         return sprintf('%s.json', $player->getName());
@@ -68,6 +62,11 @@ class EconomyDataManager implements EconomyDataManagerInterface
 
     private function getFilepath(IPlayer $player): string
     {
-        return Path::join($this->loader->getDataFolder(), self::FOLDER_NAME, $this->getJsonFilename($player));
+        return Path::join($this->getDirectoryPath(), $this->getJsonFilename($player));
+    }
+
+    public function getDirectoryPath(): string
+    {
+        return Path::join($this->loader->getDataFolder(), self::FOLDER_NAME);
     }
 }

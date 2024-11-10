@@ -92,11 +92,7 @@ class EconomyManager implements EconomyManagerInterface
 
         $moneyData = $this->economyDataManager->getMoney($player);
 
-        if ($amount < $moneyData['balance']) {
-            return true;
-        }
-
-        return false;
+        return $amount < $moneyData['balance'];
     }
 
     public function getMoney(string $playerName): int
