@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Prison\Rank\Manager;
 
 use Prison\Core\Loader\Loader;

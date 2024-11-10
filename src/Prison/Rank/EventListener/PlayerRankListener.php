@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Prison\Rank\EventListener;
 
 use pocketmine\event\Listener;
@@ -25,6 +27,13 @@ class PlayerRankListener implements Listener
         }
 
         $rank = $this->rankManager->getDefaultRank();
+
+        if (null === $rank) {
+            $event->getPlayer()->kick('Error in ranks');
+
+            return;
+        }
+
         $this->playerRankDataManager->saveRank($player, $rank);
     }
 }

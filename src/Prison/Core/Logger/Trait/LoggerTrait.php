@@ -6,6 +6,7 @@ namespace Prison\Core\Logger\Trait;
 
 use Logger;
 use pocketmine\command\CommandSender;
+use pocketmine\lang\Translatable;
 use pocketmine\utils\TextFormat;
 use Prison\Core\Loader\Interface\LoaderAwareInterface;
 
@@ -25,21 +26,24 @@ trait LoggerTrait
         }
     }
 
-    private function sendSuccess(CommandSender $sender, string $message): void
+    private function sendSuccess(CommandSender $sender, string|Translatable $message): void
     {
-        $sender->sendMessage(sprintf('%s%s', TextFormat::GREEN, $message));
+        $sender->sendMessage(sprintf('%s%s', TextFormat::GREEN, $this->getMessageText($message)));
     }
 
-    private function sendInfo(CommandSender $sender, string $message): void
+    private function sendInfo(CommandSender $sender, string|Translatable $message): void
     {
-        $sender->sendMessage(sprintf('%s%s', TextFormat::GRAY, $message));
+        $sender->sendMessage(sprintf('%s%s', TextFormat::GRAY, $this->getMessageText($message)));
     }
 
-    private function sendError(CommandSender $sender, string $message): void
+    private function sendError(CommandSender $sender, string|Translatable $message): void
     {
-        $sender->sendMessage(sprintf('%s%s', TextFormat::RED, $message));
+        $sender->sendMessage(sprintf('%s%s', TextFormat::RED, $this->getMessageText($message)));
     }
 
+    /**
+     * @param string[] $messages
+     */
     private function sendErrors(CommandSender $sender, array $messages): void
     {
         foreach ($messages as $message) {
@@ -57,5 +61,14 @@ trait LoggerTrait
     private function isDebug(): bool
     {
         return $this instanceof LoaderAwareInterface && $this->getLoader()->isDebug();
+    }
+
+    private function getMessageText(Translatable|string $message): string
+    {
+        if ($message instanceof Translatable) {
+            return $message->getText();
+        }
+
+        return $message;
     }
 }

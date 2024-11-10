@@ -20,7 +20,8 @@ class PlayerPermissionDataManager implements PlayerPermissionDataManagerInterfac
 
     private const FOLDER_NAME = 'permissions';
 
-    public function __construct(Loader $loader) {
+    public function __construct(Loader $loader)
+    {
         $this->setFilesystem(new Filesystem());
 
         $this->setLoader($loader);

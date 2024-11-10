@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Prison\Permission\Manager;
 
 use pocketmine\player\Player;
@@ -94,7 +96,7 @@ class PlayerPermissionManager implements PlayerPermissionManagerInterface
 
         $attachment = $this->loader->getAttachment($uniqueId);
 
-        if(null !== $attachment) {
+        if (null !== $attachment) {
             $player->removeAttachment($attachment);
             $this->loader->removeAttachment($uniqueId);
         }
@@ -102,8 +104,7 @@ class PlayerPermissionManager implements PlayerPermissionManagerInterface
 
     public function unregisterPlayers(): void
     {
-        foreach($this->loader->getServer()->getOnlinePlayers() as $player)
-        {
+        foreach ($this->loader->getServer()->getOnlinePlayers() as $player) {
             $this->unregisterPlayer($player);
         }
     }
@@ -112,8 +113,7 @@ class PlayerPermissionManager implements PlayerPermissionManagerInterface
     {
         $uniqueId = $this->getValidUUID($player);
 
-        if ($this->loader->hasAttachment($uniqueId))
-        {
+        if ($this->loader->hasAttachment($uniqueId)) {
             $this->logWarning(sprintf('Player %s has already registered', $player->getName()));
 
             return;
@@ -126,8 +126,7 @@ class PlayerPermissionManager implements PlayerPermissionManagerInterface
 
     public function registerPlayers(): void
     {
-        foreach($this->loader->getServer()->getOnlinePlayers() as $player)
-        {
+        foreach ($this->loader->getServer()->getOnlinePlayers() as $player) {
             $this->registerPlayer($player);
         }
     }

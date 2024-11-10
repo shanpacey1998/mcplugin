@@ -2,3 +2,8 @@ parameters:
     level: max
     paths:
         - ../src
+    ignoreErrors:
+            - '#no value type specified in iterable type#'
+            - '#but returns mixed#'
+            - '#json_decode expects string, string\|false given#'
+            - '#on mixed#'

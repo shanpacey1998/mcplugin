@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Prison\Permission\Command;
 
 use pocketmine\command\Command;
@@ -22,8 +24,7 @@ class RemovePermissionCommand extends Command implements LoaderAwareInterface
     public function __construct(
         private readonly PlayerPermissionManagerInterface $playerPermissionManager,
         Loader $loader
-    )
-    {
+    ) {
         $this->setLoader($loader);
 
         parent::__construct(
