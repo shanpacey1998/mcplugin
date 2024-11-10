@@ -11,5 +11,6 @@ return $config->setRules([
     'array_syntax' => ['syntax' => 'short'],
     'no_unused_imports' => true,
     'single_quote' => true,
+    '@PHP80Migration:risky' => true,
 ])
     ->setFinder($finder);
