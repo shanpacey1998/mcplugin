@@ -12,6 +12,7 @@ use pocketmine\permission\PermissionManager;
 use pocketmine\permission\PermissionParser;
 use pocketmine\plugin\PluginBase;
 use Prison\Permission\Command\AddPermissionCommand;
+use Prison\Permission\Command\ListAllPermissionsCommand;
 use Prison\Permission\Command\ListPermissionsCommand;
 use Prison\Permission\Command\RemovePermissionCommand;
 use Prison\Permission\DataManager\PlayerPermissionDataManager;
@@ -61,6 +62,7 @@ class Loader extends PluginBase
                 new ListPermissionsCommand($this),
                 new AddPermissionCommand($this->playerPermissionManager, $this),
                 new RemovePermissionCommand($this->playerPermissionManager, $this),
+                new ListAllPermissionsCommand(),
             ]
         );
 
