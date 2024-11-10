@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Prison\Permission\DataManager;
 
 use pocketmine\player\IPlayer;
+use Prison\Core\DataManager\DataManagerInterface;
 use Prison\Core\Loader\Interface\LoaderAwareInterface;
 
-interface PlayerPermissionDataManagerInterface extends LoaderAwareInterface
+interface PlayerPermissionDataManagerInterface extends LoaderAwareInterface, DataManagerInterface
 {
     /**
      * @param string[] $permissions
@@ -19,6 +20,4 @@ interface PlayerPermissionDataManagerInterface extends LoaderAwareInterface
      * @return string[]
      */
     public function getPermissions(IPlayer $player): array;
-
-    public function createDirectory(): void;
 }

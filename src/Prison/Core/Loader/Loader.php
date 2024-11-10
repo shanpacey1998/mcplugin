@@ -25,6 +25,10 @@ use Prison\Permission\EventListener\PlayerPermissionListener;
 use Prison\Permission\Manager\PlayerPermissionManager;
 use Prison\Permission\Manager\PlayerPermissionManagerInterface;
 use Prison\Permission\PermissionList;
+use Prison\Rank\DataManager\PlayerRankDataManager;
+use Prison\Rank\DataManager\RankDataManager;
+use Prison\Rank\EventListener\PlayerRankListener;
+use Prison\Rank\Manager\RankManager;
 use Symfony\Component\Filesystem\Filesystem;
 
 class Loader extends PluginBase
@@ -47,8 +51,11 @@ class Loader extends PluginBase
         $fileSystem = new Filesystem();
         $fileSystem->mkdir($this->getDataFolder());
 
+        $this->registerDataManagers();
+
         $this->attachments = [];
 
+        $rankDataManager = new RankDataManager($this);
         $playerPermissionDataManager = new PlayerPermissionDataManager($this);
         $playerPermissionDataManager->createDirectory();
 
@@ -66,6 +73,10 @@ class Loader extends PluginBase
         $this->playerPermissionManager->registerPlayers();
 
         $this->getServer()->getPluginManager()->registerEvents(new PlayerPermissionListener($this->playerPermissionManager), $this);
+        $this->getServer()->getPluginManager()->registerEvents(new PlayerRankListener(
+            new PlayerRankDataManager($rankDataManager, $this),
+            new RankManager($rankDataManager, $this)
+        ), $this);
         $this->getServer()->getPluginManager()->registerEvents(new EconomyListener($this->economyManager), $this);
 
         $this->getServer()->getCommandMap()->registerAll(
@@ -76,7 +87,7 @@ class Loader extends PluginBase
                 new RemovePermissionCommand($this->playerPermissionManager, $this),
                 new ListAllPermissionsCommand(),
                 new AddMoneyCommand($this->economyManager, $this),
-                new SubtractMoneyCommand($this->economyManager, $this),
+                //new SubtractMoneyCommand($this->economyManager, $this),
 
             ]
         );
@@ -124,11 +135,11 @@ class Loader extends PluginBase
         return $this->isDebug;
     }
 
-    private function registerPermissions(): void
+    private function registerPermissions(array $permissionsToRegister): void
     {
         $permissionManager = PermissionManager::getInstance();
 
-        foreach (PermissionList::PERMISSIONS_MAP as $permission => $default) {
+        foreach ($permissionsToRegister as $permission => $default) {
             if (null !== $permissionManager->getPermission($permission)) {
                 $this->getServer()->getLogger()->critical(sprintf('Permission "%s" already registered.', $permission));
 
@@ -145,7 +156,7 @@ class Loader extends PluginBase
             return;
         }
 
-        foreach (PermissionList::PERMISSIONS_MAP as $permission => $default) {
+        foreach ($permissionsToRegister as $permission => $default) {
             $parsedPermission = new Permission($permission);
             $permissionManager->addPermission($parsedPermission);
 
@@ -165,7 +176,37 @@ class Loader extends PluginBase
                     break;
             }
         }
+    }
 
-        // TODO register rank permissions
+    private function registerDataManagers(): void
+    {
+        $playerPermissionDataManager = new PlayerPermissionDataManager($this);
+        $playerPermissionDataManager->createDirectory();
+
+        $rankDataManager = new RankDataManager($this);
+        $rankDataManager->createDirectory();
+
+        $playerRankDataManager = new PlayerRankDataManager($rankDataManager, $this);
+        $playerRankDataManager->createDirectory();
+
+        $rankManager = new RankManager($rankDataManager, $this);
+        $ranks = $rankManager->getRanksByOrder();
+        $rankPermissions = [];
+
+        foreach ($ranks as $rank) {
+            foreach ($rank->getPermissions() as $permission) {
+                $rankPermissions[$permission] = PermissionParser::DEFAULT_OP;
+            }
+        }
+
+        $this->playerPermissionManager = new PlayerPermissionManager(
+            $playerPermissionDataManager,
+            $this
+        );
+
+        $this->registerPermissions(PermissionList::PERMISSIONS_MAP);
+        $this->registerPermissions($rankPermissions);
+
+        $this->playerPermissionManager->registerPlayers();
     }
 }
