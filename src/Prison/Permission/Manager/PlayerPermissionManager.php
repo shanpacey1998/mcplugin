@@ -14,7 +14,7 @@ class PlayerPermissionManager implements PlayerPermissionManagerInterface
     use LoggerTrait;
 
     public function __construct(
-        private PlayerPermissionDataManagerInterface $playerPermissionDataManager,
+        private readonly PlayerPermissionDataManagerInterface $playerPermissionDataManager,
         Loader $loader,
     ) {
         $this->setLoader($loader);

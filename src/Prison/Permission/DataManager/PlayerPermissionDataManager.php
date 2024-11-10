@@ -34,7 +34,7 @@ class PlayerPermissionDataManager implements PlayerPermissionDataManagerInterfac
             $this->filesystem->touch($filePath);
         }
 
-        $successful = file_put_contents($filePath, json_encode($permissions, JSON_THROW_ON_ERROR));
+        $successful = file_put_contents($filePath, json_encode($permissions, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT));
 
         if (false !== $successful) {
             $this->logInfo(sprintf('Updated permissions for player: %s', $player->getName()));
@@ -47,10 +47,10 @@ class PlayerPermissionDataManager implements PlayerPermissionDataManagerInterfac
 
         if (!$this->filesystem->exists($filePath)) {
             $this->filesystem->touch($filePath);
-            file_put_contents($filePath, json_encode([], JSON_THROW_ON_ERROR));
+            file_put_contents($filePath, json_encode([], JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT));
         }
 
-        return json_decode(file_get_contents($filePath), true, 512, JSON_THROW_ON_ERROR);
+        return json_decode(file_get_contents($filePath), true, 512, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
     }
 
     public function createDirectory(): void

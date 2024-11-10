@@ -20,6 +20,8 @@ use Prison\Permission\EventListener\PlayerPermissionListener;
 use Prison\Permission\Manager\PlayerPermissionManager;
 use Prison\Permission\Manager\PlayerPermissionManagerInterface;
 use Prison\Permission\PermissionList;
+use Prison\Rank\DataManager\RankDataManager;
+use Prison\Rank\Manager\RankManager;
 use Symfony\Component\Filesystem\Filesystem;
 
 class Loader extends PluginBase
@@ -40,19 +42,9 @@ class Loader extends PluginBase
         $fileSystem = new Filesystem();
         $fileSystem->mkdir($this->getDataFolder());
 
+        $this->registerDataManagers();
+
         $this->attachments = [];
-
-        $playerPermissionDataManager = new PlayerPermissionDataManager($this);
-        $playerPermissionDataManager->createDirectory();
-
-        $this->playerPermissionManager = new PlayerPermissionManager(
-            $playerPermissionDataManager,
-            $this
-        );
-
-        $this->registerPermissions();
-
-        $this->playerPermissionManager->registerPlayers();
 
         $this->getServer()->getPluginManager()->registerEvents(new PlayerPermissionListener($this->playerPermissionManager), $this);
 
@@ -109,11 +101,11 @@ class Loader extends PluginBase
         return $this->isDebug;
     }
 
-    private function registerPermissions(): void
+    private function registerPermissions(array $permissionsToRegister): void
     {
         $permissionManager = PermissionManager::getInstance();
 
-        foreach (PermissionList::PERMISSIONS_MAP as $permission => $default) {
+        foreach ($permissionsToRegister as $permission => $default) {
             if (null !== $permissionManager->getPermission($permission)) {
                 $this->getServer()->getLogger()->critical(sprintf('Permission "%s" already registered.', $permission));
 
@@ -130,7 +122,7 @@ class Loader extends PluginBase
             return;
         }
 
-        foreach (PermissionList::PERMISSIONS_MAP as $permission => $default) {
+        foreach ($permissionsToRegister as $permission => $default) {
             $parsedPermission = new Permission($permission);
             $permissionManager->addPermission($parsedPermission);
 
@@ -150,7 +142,33 @@ class Loader extends PluginBase
                     break;
             }
         }
+    }
 
-        // TODO register rank permissions
+    private function registerDataManagers(): void
+    {
+        $playerPermissionDataManager = new PlayerPermissionDataManager($this);
+        $playerPermissionDataManager->createDirectory();
+
+        $rankDataManager = new RankDataManager($this);
+        $rankDataManager->createDirectory();
+        $rankManager = new RankManager($rankDataManager, $this);
+        $ranks = $rankManager->getRanksByOrder();
+        $rankPermissions = [];
+
+        foreach ($ranks as $rank) {
+            foreach ($rank->getPermissions() as $permission) {
+                $rankPermissions[$permission] = PermissionParser::DEFAULT_OP;
+            }
+        }
+
+        $this->playerPermissionManager = new PlayerPermissionManager(
+            $playerPermissionDataManager,
+            $this
+        );
+
+        $this->registerPermissions(PermissionList::PERMISSIONS_MAP);
+        $this->registerPermissions($rankPermissions);
+
+        $this->playerPermissionManager->registerPlayers();
     }
 }
