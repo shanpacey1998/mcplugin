@@ -20,7 +20,8 @@ class RankDataManager implements RankDataManagerInterface
 
     public const FOLDER_NAME = 'ranks';
 
-    public function __construct(Loader $loader) {
+    public function __construct(Loader $loader)
+    {
         $this->setFilesystem(new Filesystem());
         $this->setLoader($loader);
     }
@@ -37,6 +38,8 @@ class RankDataManager implements RankDataManagerInterface
 
         $ranks = json_decode(file_get_contents($filePath), true, 512, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
         $indexedRanks = [];
+
+        \assert(is_array($ranks));
 
         foreach ($ranks as $rankToIndex) {
             $rank = Rank::fromJson($rankToIndex);

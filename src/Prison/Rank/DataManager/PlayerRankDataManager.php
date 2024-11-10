@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Prison\Rank\DataManager;
 
 use pocketmine\player\IPlayer;
@@ -20,7 +22,8 @@ class PlayerRankDataManager implements PlayerRankDataManagerInterface
 
     private const FOLDER_NAME = 'players';
 
-    public function __construct(private readonly RankDataManagerInterface $rankDataManager, Loader $loader) {
+    public function __construct(Loader $loader)
+    {
         $this->setFilesystem(new Filesystem());
         $this->setLoader($loader);
     }

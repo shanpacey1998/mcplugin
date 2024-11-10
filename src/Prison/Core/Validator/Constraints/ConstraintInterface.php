@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Prison\Core\Validator\Constraints;
 
 interface ConstraintInterface

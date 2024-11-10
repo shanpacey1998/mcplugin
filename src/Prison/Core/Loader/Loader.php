@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Prison\Core\Loader;
 
-use pocketmine\lang\KnownTranslationFactory;
 use pocketmine\permission\DefaultPermissions;
 use pocketmine\permission\Permission;
 use pocketmine\permission\PermissionAttachment;
@@ -75,7 +74,7 @@ class Loader extends PluginBase
 
         $this->getServer()->getPluginManager()->registerEvents(new PlayerPermissionListener($this->playerPermissionManager), $this);
         $this->getServer()->getPluginManager()->registerEvents(new PlayerRankListener(
-            new PlayerRankDataManager($rankDataManager, $this),
+            new PlayerRankDataManager($this),
             new RankManager($rankDataManager, $this)
         ), $this);
         $this->getServer()->getPluginManager()->registerEvents(new EconomyListener($this->economyManager), $this);
@@ -186,7 +185,7 @@ class Loader extends PluginBase
         $rankDataManager = new RankDataManager($this);
         $rankDataManager->createDirectory();
 
-        $playerRankDataManager = new PlayerRankDataManager($rankDataManager, $this);
+        $playerRankDataManager = new PlayerRankDataManager($this);
         $playerRankDataManager->createDirectory();
 
         $rankManager = new RankManager($rankDataManager, $this);

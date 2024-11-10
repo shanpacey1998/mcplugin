@@ -1,19 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Prison\Permission\Command;
 
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\permission\PermissionManager;
-use pocketmine\player\Player;
-use Prison\Core\Loader\Interface\LoaderAwareInterface;
-use Prison\Core\Loader\Loader;
-use Prison\Core\Loader\Trait\LoaderAwareTrait;
 use Prison\Core\Logger\Trait\LoggerTrait;
-use Prison\Core\Validator\CommandValidator;
-use Prison\Core\Validator\Constraints\Validator\Validator;
 use Prison\Permission\PermissionList;
-use Prison\Permission\Validator\Constraints\ListPermissionsConstraint;
 
 class ListAllPermissionsCommand extends Command
 {

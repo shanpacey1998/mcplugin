@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Prison\Permission\Command;
 
 use pocketmine\command\Command;
@@ -10,7 +12,6 @@ use Prison\Core\Loader\Loader;
 use Prison\Core\Loader\Trait\LoaderAwareTrait;
 use Prison\Core\Logger\Trait\LoggerTrait;
 use Prison\Core\Validator\CommandValidator;
-use Prison\Core\Validator\Constraints\Validator\Validator;
 use Prison\Permission\PermissionList;
 use Prison\Permission\Validator\Constraints\ListPermissionsConstraint;
 
