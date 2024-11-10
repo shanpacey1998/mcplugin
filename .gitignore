@@ -2,3 +2,5 @@
 build/PrisonCore.phar
 phpchecks/vendor
 references
+
+.php-cs-fixer.cache

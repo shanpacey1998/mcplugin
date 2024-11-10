@@ -30,7 +30,6 @@ use Prison\Permission\Manager\PlayerPermissionManagerInterface;
 use Prison\Permission\PermissionList;
 use Prison\Rank\DataManager\PlayerRankDataManager;
 use Prison\Rank\DataManager\RankDataManager;
-use Prison\Rank\EventListener\PlayerRankListener;
 use Prison\Rank\Manager\RankManager;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -58,13 +57,7 @@ class Loader extends PluginBase
 
         $this->attachments = [];
 
-        $rankDataManager = new RankDataManager($this);
-
         $this->getServer()->getPluginManager()->registerEvents(new PlayerPermissionListener($this->playerPermissionManager), $this);
-        $this->getServer()->getPluginManager()->registerEvents(new PlayerRankListener(
-            new PlayerRankDataManager($this),
-            new RankManager($rankDataManager, $this)
-        ), $this);
         $this->getServer()->getPluginManager()->registerEvents(new EconomyListener($this->economyManager), $this);
 
         $this->getServer()->getCommandMap()->registerAll(
