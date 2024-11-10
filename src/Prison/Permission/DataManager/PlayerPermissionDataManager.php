@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Prison\Permission\DataManager;
 
 use pocketmine\player\IPlayer;
+use Prison\Core\DataManager\Trait\FilesystemTrait;
 use Prison\Core\Loader\Loader;
 use Prison\Core\Loader\Trait\LoaderAwareTrait;
 use Prison\Core\Logger\Trait\LoggerTrait;
@@ -13,15 +14,14 @@ use Symfony\Component\Filesystem\Path;
 
 class PlayerPermissionDataManager implements PlayerPermissionDataManagerInterface
 {
+    use FilesystemTrait;
     use LoaderAwareTrait;
     use LoggerTrait;
 
     private const FOLDER_NAME = 'permissions';
 
-    private Filesystem $filesystem;
-
     public function __construct(Loader $loader) {
-        $this->filesystem = new Filesystem();
+        $this->setFilesystem(new Filesystem());
 
         $this->setLoader($loader);
     }
@@ -53,11 +53,9 @@ class PlayerPermissionDataManager implements PlayerPermissionDataManagerInterfac
         return json_decode(file_get_contents($filePath), true, 512, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
     }
 
-    public function createDirectory(): void
+    public function getDirectoryPath(): string
     {
-        $folderPath = Path::join($this->loader->getDataFolder(), self::FOLDER_NAME);
-
-        $this->filesystem->mkdir($folderPath);
+        return Path::join($this->loader->getDataFolder(), self::FOLDER_NAME);
     }
 
     private function getJsonFilename(IPlayer $player): string
@@ -67,6 +65,6 @@ class PlayerPermissionDataManager implements PlayerPermissionDataManagerInterfac
 
     private function getFilepath(IPlayer $player): string
     {
-        return Path::join($this->loader->getDataFolder(), self::FOLDER_NAME, $this->getJsonFilename($player));
+        return Path::join($this->getDirectoryPath(), $this->getJsonFilename($player));
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Prison\Rank\DataManager;
 
+use Prison\Core\DataManager\Trait\FilesystemTrait;
 use Prison\Core\Loader\Loader;
 use Prison\Core\Loader\Trait\LoaderAwareTrait;
 use Prison\Core\Logger\Trait\LoggerTrait;
@@ -13,16 +14,14 @@ use Symfony\Component\Filesystem\Path;
 
 class RankDataManager implements RankDataManagerInterface
 {
+    use FilesystemTrait;
     use LoaderAwareTrait;
     use LoggerTrait;
 
-    private const FOLDER_NAME = 'ranks';
-
-    private Filesystem $filesystem;
+    public const FOLDER_NAME = 'ranks';
 
     public function __construct(Loader $loader) {
-        $this->filesystem = new Filesystem();
-
+        $this->setFilesystem(new Filesystem());
         $this->setLoader($loader);
     }
 
@@ -76,11 +75,9 @@ class RankDataManager implements RankDataManagerInterface
         file_put_contents($this->getFilepath(), json_encode($ranks, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT));
     }
 
-    public function createDirectory(): void
+    public function getDirectoryPath(): string
     {
-        $folderPath = Path::join($this->loader->getDataFolder(), self::FOLDER_NAME);
-
-        $this->filesystem->mkdir($folderPath);
+        return Path::join($this->loader->getDataFolder(), self::FOLDER_NAME);
     }
 
     private function getJsonFilename(): string
@@ -90,6 +87,6 @@ class RankDataManager implements RankDataManagerInterface
 
     private function getFilepath(): string
     {
-        return Path::join($this->loader->getDataFolder(), self::FOLDER_NAME, $this->getJsonFilename());
+        return Path::join($this->getDirectoryPath(), $this->getJsonFilename());
     }
 }
