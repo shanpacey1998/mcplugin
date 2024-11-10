@@ -87,8 +87,7 @@ class Loader extends PluginBase
                 new RemovePermissionCommand($this->playerPermissionManager, $this),
                 new ListAllPermissionsCommand(),
                 new AddMoneyCommand($this->economyManager, $this),
-                //new SubtractMoneyCommand($this->economyManager, $this),
-
+                new SubtractMoneyCommand($this->economyManager, $this),
             ]
         );
 
