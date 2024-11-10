@@ -11,6 +11,7 @@ use pocketmine\permission\PermissionManager;
 use pocketmine\permission\PermissionParser;
 use pocketmine\plugin\PluginBase;
 use Prison\Economy\Command\AddMoneyCommand;
+use Prison\Economy\Command\SetMoneyCommand;
 use Prison\Economy\Command\SubtractMoneyCommand;
 use Prison\Economy\DataManager\EconomyDataManager;
 use Prison\Economy\EventListener\EconomyListener;
@@ -88,6 +89,7 @@ class Loader extends PluginBase
                 new ListAllPermissionsCommand(),
                 new AddMoneyCommand($this->economyManager, $this),
                 new SubtractMoneyCommand($this->economyManager, $this),
+                new SetMoneyCommand($this->economyManager, $this),
             ]
         );
 

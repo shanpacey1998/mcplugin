@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Prison\Economy\Command;
 
 use pocketmine\command\Command;

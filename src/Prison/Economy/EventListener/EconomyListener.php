@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Prison\Economy\EventListener;
 
 use pocketmine\event\Listener;
