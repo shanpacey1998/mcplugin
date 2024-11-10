@@ -10,6 +10,15 @@ use pocketmine\permission\PermissionAttachment;
 use pocketmine\permission\PermissionManager;
 use pocketmine\permission\PermissionParser;
 use pocketmine\plugin\PluginBase;
+use Prison\Economy\Command\AddMoneyCommand;
+use Prison\Economy\Command\MyMoneyCommand;
+use Prison\Economy\Command\SeeMoneyCommand;
+use Prison\Economy\Command\SetMoneyCommand;
+use Prison\Economy\Command\SubtractMoneyCommand;
+use Prison\Economy\DataManager\EconomyDataManager;
+use Prison\Economy\EventListener\EconomyListener;
+use Prison\Economy\Manager\EconomyManager;
+use Prison\Economy\Manager\EconomyManagerInterface;
 use Prison\Permission\Command\AddPermissionCommand;
 use Prison\Permission\Command\ListAllPermissionsCommand;
 use Prison\Permission\Command\ListPermissionsCommand;
@@ -37,6 +46,8 @@ class Loader extends PluginBase
 
     private PlayerPermissionManagerInterface $playerPermissionManager;
 
+    private EconomyManagerInterface $economyManager;
+
     protected function onEnable(): void
     {
         $fileSystem = new Filesystem();
@@ -47,6 +58,7 @@ class Loader extends PluginBase
         $this->attachments = [];
 
         $this->getServer()->getPluginManager()->registerEvents(new PlayerPermissionListener($this->playerPermissionManager), $this);
+        $this->getServer()->getPluginManager()->registerEvents(new EconomyListener($this->economyManager), $this);
 
         $this->getServer()->getCommandMap()->registerAll(
             self::FALLBACK_PREFIX,
@@ -55,6 +67,11 @@ class Loader extends PluginBase
                 new AddPermissionCommand($this->playerPermissionManager, $this),
                 new RemovePermissionCommand($this->playerPermissionManager, $this),
                 new ListAllPermissionsCommand(),
+                new AddMoneyCommand($this->economyManager, $this),
+                new SubtractMoneyCommand($this->economyManager, $this),
+                new SetMoneyCommand($this->economyManager, $this),
+                new SeeMoneyCommand($this->economyManager, $this),
+                new MyMoneyCommand($this->economyManager, $this),
             ]
         );
 
@@ -151,6 +168,10 @@ class Loader extends PluginBase
 
         $rankDataManager = new RankDataManager($this);
         $rankDataManager->createDirectory();
+
+        $economyDataManager = new EconomyDataManager($this);
+        $economyDataManager->createDirectory();
+        $this->economyManager = new EconomyManager($this, $economyDataManager);
 
         $playerRankDataManager = new PlayerRankDataManager($this);
         $playerRankDataManager->createDirectory();
