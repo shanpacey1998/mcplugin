@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Prison\Economy\Command;
 
 use pocketmine\command\Command;
@@ -13,10 +11,11 @@ use Prison\Core\Loader\Trait\LoaderAwareTrait;
 use Prison\Core\Logger\Trait\LoggerTrait;
 use Prison\Core\Validator\CommandValidator;
 use Prison\Economy\Manager\EconomyManagerInterface;
+use Prison\Economy\Validator\GetMoneyConstraint;
 use Prison\Economy\Validator\MoneyConstraint;
 use Prison\Permission\PermissionList;
 
-class SubtractMoneyCommand extends Command implements LoaderAwareInterface
+class SeeMoneyCommand extends Command implements LoaderAwareInterface
 {
     use LoaderAwareTrait;
     use LoggerTrait;
@@ -29,26 +28,25 @@ class SubtractMoneyCommand extends Command implements LoaderAwareInterface
         $this->setLoader($loader);
 
         parent::__construct(
-            'subtractmoney',
-            'Subtracts the given amount of money from the specified player',
-            '/subtractmoney <playername> <amount>',
-            ['subbalance', 'subbal', 'submoney']
+            'seemoney',
+            'Outputs the specified player\'s balance',
+            '/seemoney <playername>',
+            ['seebalance', 'seebal', 'seemoney']
         );
 
-        $this->setPermission(PermissionList::SUBTRACT_MONEY_COMMAND);
+        $this->setPermission(PermissionList::SET_MONEY_COMMAND);
     }
-
     public function execute(CommandSender $sender, string $commandLabel, array $args): void
     {
         $commandValidator = new CommandValidator($sender);
 
-        if (!$commandValidator->isValid($args, new MoneyConstraint($this->loader))) {
+        if (!$commandValidator->isValid($args, new GetMoneyConstraint($this->loader))) {
             $this->sendInfo($sender, $this->getUsage());
 
             return;
         }
 
-        [$playerName, $amount] = $args;
+        [$playerName] = $args;
 
         $player = $this->loader->getServer()->getOfflinePlayer($playerName);
 
@@ -56,8 +54,8 @@ class SubtractMoneyCommand extends Command implements LoaderAwareInterface
             return;
         }
 
-        $this->economyManager->subtractMoney($player->getName(),(int) $amount);
+        $balance = $this->economyManager->getMoney($player->getName());
 
-        $this->sendSuccess($sender, sprintf('Successfully subtracted %d money from %s', $amount, $player->getName()));
+        $this->sendSuccess($sender, sprintf('%s\'s balance is %d', $player->getName(), $balance));
     }
 }
