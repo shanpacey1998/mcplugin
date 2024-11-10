@@ -4,16 +4,17 @@ namespace Prison\Permission\Command;
 
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
-use pocketmine\permission\PermissionManager;
 use pocketmine\player\Player;
 use Prison\Core\Loader\Interface\LoaderAwareInterface;
 use Prison\Core\Loader\Loader;
 use Prison\Core\Loader\Trait\LoaderAwareTrait;
 use Prison\Core\Logger\Trait\LoggerTrait;
+use Prison\Core\Validator\CommandValidator;
 use Prison\Core\Validator\Constraints\Validator\Validator;
 use Prison\Permission\Manager\PlayerPermissionManagerInterface;
 use Prison\Permission\PermissionList;
 use Prison\Permission\Validator\Constraints\AddPermissionConstraint;
+use Prison\Permission\Validator\Constraints\ListPermissionsConstraint;
 
 class AddPermissionCommand extends Command implements LoaderAwareInterface
 {
@@ -34,16 +35,14 @@ class AddPermissionCommand extends Command implements LoaderAwareInterface
             ['addperm', 'setpermission', 'setperm']
         );
 
-        $this->setPermission(PermissionList::LIST_PERMISSIONS_COMMAND);
+        $this->setPermission(PermissionList::ADD_PERMISSION_COMMAND);
     }
 
     public function execute(CommandSender $sender, string $commandLabel, array $args): void
     {
-        $validator = new Validator();
-        $errors = $validator->validate($args, [new AddPermissionConstraint($this->loader)]);
+        $commandValidator = new CommandValidator($sender);
 
-        if (count($errors) > 0) {
-            $this->sendErrors($sender, $errors);
+        if (!$commandValidator->isValid($args, new AddPermissionConstraint($this->loader))) {
             $this->sendInfo($sender, $this->getUsage());
 
             return;

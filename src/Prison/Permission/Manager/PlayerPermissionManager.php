@@ -73,7 +73,7 @@ class PlayerPermissionManager implements PlayerPermissionManagerInterface
         $attachment = $this->loader->getAttachment($this->getValidUUID($player));
 
         if (null === $attachment) {
-            $this->loader->getLogger()->error(sprintf('Player %s has no attachment', $player->getName()));
+            $this->logWarning(sprintf('Player %s has no attachment', $player->getName()));
 
             return;
         }
@@ -81,10 +81,10 @@ class PlayerPermissionManager implements PlayerPermissionManagerInterface
         $attachment->clearPermissions();
         $attachment->setPermissions($pocketminePermissions);
 
-        $this->loader->getLogger()->info(sprintf('Updated Permissions for %s', $player->getName()));
+        $this->logInfo(sprintf('Updated Permissions for %s', $player->getName()));
 
         foreach ($player->getEffectivePermissions() as $effectivePermission) {
-            $this->loader->getLogger()->info($effectivePermission->getPermission());
+            $this->logInfo($effectivePermission->getPermission());
         }
     }
 
@@ -114,7 +114,7 @@ class PlayerPermissionManager implements PlayerPermissionManagerInterface
 
         if ($this->loader->hasAttachment($uniqueId))
         {
-            $this->loader->getLogger()->info(sprintf('Player %s has already registered', $player->getName()));
+            $this->logWarning(sprintf('Player %s has already registered', $player->getName()));
 
             return;
         }

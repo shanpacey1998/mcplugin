@@ -13,6 +13,7 @@ use pocketmine\permission\PermissionParser;
 use pocketmine\plugin\PluginBase;
 use Prison\Permission\Command\AddPermissionCommand;
 use Prison\Permission\Command\ListPermissionsCommand;
+use Prison\Permission\Command\RemovePermissionCommand;
 use Prison\Permission\DataManager\PlayerPermissionDataManager;
 use Prison\Permission\EventListener\PlayerPermissionListener;
 use Prison\Permission\Manager\PlayerPermissionManager;
@@ -58,7 +59,8 @@ class Loader extends PluginBase
             self::FALLBACK_PREFIX,
             [
                 new ListPermissionsCommand($this),
-                new AddPermissionCommand($this->playerPermissionManager, $this)
+                new AddPermissionCommand($this->playerPermissionManager, $this),
+                new RemovePermissionCommand($this->playerPermissionManager, $this),
             ]
         );
 

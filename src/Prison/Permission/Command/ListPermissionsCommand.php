@@ -9,6 +9,7 @@ use Prison\Core\Loader\Interface\LoaderAwareInterface;
 use Prison\Core\Loader\Loader;
 use Prison\Core\Loader\Trait\LoaderAwareTrait;
 use Prison\Core\Logger\Trait\LoggerTrait;
+use Prison\Core\Validator\CommandValidator;
 use Prison\Core\Validator\Constraints\Validator\Validator;
 use Prison\Permission\PermissionList;
 use Prison\Permission\Validator\Constraints\ListPermissionsConstraint;
@@ -34,11 +35,9 @@ class ListPermissionsCommand extends Command implements LoaderAwareInterface
 
     public function execute(CommandSender $sender, string $commandLabel, array $args): void
     {
-        $validator = new Validator();
-        $errors = $validator->validate($args, [new ListPermissionsConstraint($this->loader)]);
+        $commandValidator = new CommandValidator($sender);
 
-        if (count($errors) > 0) {
-            $this->sendErrors($sender, $errors);
+        if (!$commandValidator->isValid($args, new ListPermissionsConstraint($this->loader))) {
             $this->sendInfo($sender, $this->getUsage());
 
             return;
