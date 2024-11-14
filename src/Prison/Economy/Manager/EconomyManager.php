@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Prison\Economy\Manager;
 
+use Ifera\ScoreHud\event\PlayerTagUpdateEvent;
+use Ifera\ScoreHud\scoreboard\ScoreTag;
 use pocketmine\player\IPlayer;
 use pocketmine\player\Player;
 use Prison\Core\Loader\Loader;
@@ -41,6 +43,7 @@ class EconomyManager implements EconomyManagerInterface
         $this->logInfo(sprintf('Adding %d money to %s', $amount, $player->getName()));
 
         $this->economyDataManager->saveMoney($player, $moneyData);
+        (new PlayerTagUpdateEvent($player, new ScoreTag("economy.money", (string) $moneyData['balance'])))->call();
     }
 
     public function subtractMoney(string $playerName, int $amount): void
@@ -63,6 +66,7 @@ class EconomyManager implements EconomyManagerInterface
         $this->logInfo(sprintf('Subtracting %d money from %s', $amount, $player->getName()));
 
         $this->economyDataManager->saveMoney($player, $moneyData);
+        (new PlayerTagUpdateEvent($player, new ScoreTag("economy.money", (string) $moneyData['balance'])))->call();
     }
 
     public function setMoney(string $playerName, int $amount): void
@@ -77,9 +81,10 @@ class EconomyManager implements EconomyManagerInterface
 
         $moneyData['balance'] = $amount;
 
-        $this->logInfo(sprintf('Resetting balance to 0 for %s', $player->getName()));
+        $this->logInfo(sprintf('Setting balance to %d for %s', $amount, $player->getName()));
 
         $this->economyDataManager->saveMoney($player, $moneyData);
+        (new PlayerTagUpdateEvent($player, new ScoreTag("economy.money", (string) $moneyData['balance'])))->call();
     }
 
     public function hasMoney(string $playerName, int $amount): bool
@@ -112,12 +117,14 @@ class EconomyManager implements EconomyManagerInterface
     {
         $moneyData = $this->economyDataManager->getMoney($player);
         $balance = 0;
+        $player = $this->loader->getServer()->getOfflinePlayer($player->getName());
 
         if ($moneyData['balance'] > 0) {
             $balance = $moneyData['balance'];
         }
 
         $this->economyDataManager->saveMoney($player, ['balance' => $balance]);
+        (new PlayerTagUpdateEvent($player, new ScoreTag("economy.money", (string) $moneyData['balance'])))->call();
     }
 
     public function setPlayerMoney(IPlayer $player, int $amount): void
