@@ -43,6 +43,8 @@ class EconomyManager implements EconomyManagerInterface
         $this->logInfo(sprintf('Adding %d money to %s', $amount, $player->getName()));
 
         $this->economyDataManager->saveMoney($player, $moneyData);
+
+        // @phpstan-ignore-next-line
         $event = new PlayerTagUpdateEvent($player, new ScoreTag("economy.money", (string) $moneyData['balance']));
         $event->call();
     }
@@ -67,6 +69,8 @@ class EconomyManager implements EconomyManagerInterface
         $this->logInfo(sprintf('Subtracting %d money from %s', $amount, $player->getName()));
 
         $this->economyDataManager->saveMoney($player, $moneyData);
+
+        // @phpstan-ignore-next-line
         $event = new PlayerTagUpdateEvent($player, new ScoreTag("economy.money", (string) $moneyData['balance']));
         $event->call();
     }
@@ -86,6 +90,8 @@ class EconomyManager implements EconomyManagerInterface
         $this->logInfo(sprintf('Setting balance to %d for %s', $amount, $player->getName()));
 
         $this->economyDataManager->saveMoney($player, $moneyData);
+
+        // @phpstan-ignore-next-line
         $event = new PlayerTagUpdateEvent($player, new ScoreTag("economy.money", (string) $moneyData['balance']));
         $event->call();
     }
