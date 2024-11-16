@@ -43,7 +43,8 @@ class EconomyManager implements EconomyManagerInterface
         $this->logInfo(sprintf('Adding %d money to %s', $amount, $player->getName()));
 
         $this->economyDataManager->saveMoney($player, $moneyData);
-        (new PlayerTagUpdateEvent($player, new ScoreTag("economy.money", (string) $moneyData['balance'])))->call();
+        $event = new PlayerTagUpdateEvent($player, new ScoreTag("economy.money", (string) $moneyData['balance']));
+        $event->call();
     }
 
     public function subtractMoney(string $playerName, int $amount): void
@@ -66,7 +67,8 @@ class EconomyManager implements EconomyManagerInterface
         $this->logInfo(sprintf('Subtracting %d money from %s', $amount, $player->getName()));
 
         $this->economyDataManager->saveMoney($player, $moneyData);
-        (new PlayerTagUpdateEvent($player, new ScoreTag("economy.money", (string) $moneyData['balance'])))->call();
+        $event = new PlayerTagUpdateEvent($player, new ScoreTag("economy.money", (string) $moneyData['balance']));
+        $event->call();
     }
 
     public function setMoney(string $playerName, int $amount): void
@@ -84,7 +86,8 @@ class EconomyManager implements EconomyManagerInterface
         $this->logInfo(sprintf('Setting balance to %d for %s', $amount, $player->getName()));
 
         $this->economyDataManager->saveMoney($player, $moneyData);
-        (new PlayerTagUpdateEvent($player, new ScoreTag("economy.money", (string) $moneyData['balance'])))->call();
+        $event = new PlayerTagUpdateEvent($player, new ScoreTag("economy.money", (string) $moneyData['balance']));
+        $event->call();
     }
 
     public function hasMoney(string $playerName, int $amount): bool
@@ -124,7 +127,8 @@ class EconomyManager implements EconomyManagerInterface
         }
 
         $this->economyDataManager->saveMoney($player, ['balance' => $balance]);
-        (new PlayerTagUpdateEvent($player, new ScoreTag("economy.money", (string) $moneyData['balance'])))->call();
+        $event = new PlayerTagUpdateEvent($player, new ScoreTag("economy.money", (string) $moneyData['balance']));
+        $event->call();
     }
 
     public function setPlayerMoney(IPlayer $player, int $amount): void
